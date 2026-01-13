@@ -10,7 +10,7 @@
 <div class="min-h-screen bg-gray-900">
   <!-- NAVBAR -->
   <nav class="border-b border-gray-800">
-    <div class="mx-auto max-w-7xl px-8 py-4 flex items-center justify-between">
+    <div class="mx-auto max-w-7xl px-8 py-4 flex">
       <!-- Left -->
       <div class="flex items-center gap-8">
         <a href="/" class="text-xl font-bold text-white"> Todos </a>

@@ -17,12 +17,13 @@ export async function getTodo(id: string, fetchFn = fetch): Promise<Todo> {
 
 export async function createTodo(
   title: string,
+  description: string,
   fetchFn = fetch
 ): Promise<Todo> {
   const res = await fetchFn(base, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ title }),
+    body: JSON.stringify({ title, description }),
   });
 
   if (!res.ok) throw new Error("Failed to create todo");

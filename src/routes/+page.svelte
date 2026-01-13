@@ -6,29 +6,29 @@
 </script>
 
 {#if data.todos.length === 0}
-  <div class="text-center py-12 text-gray-400">No todos found</div>
+  <div class="py-12 text-gray-400">No todos found</div>
 {/if}
-
-<div class="max-w-5xl space-y-6">
-  <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+<div class="max-w-5xl mx-auto p-6">
+  <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 auto-rows-fr">
     {#each data.todos as todo (todo.id)}
       <Item.Root
         variant="outline"
-        class="bg-gray-800 p-4 rounded-lg shadow group"
+        class="bg-gray-800 p-4 rounded-lg shadow group flex flex-col"
       >
-        <div class="space-y-2">
-          <Item.Title class="text-lg font-semibold ">
-            <a href="/todos/{todo.id}">
-              {todo.title}
-            </a>
+        <!-- Top-left aligned content -->
+        <div class="flex-1 flex flex-col space-y-2 text-left">
+          <Item.Title class="text-lg font-semibold">
+            <a href="/todos/{todo.id}">{todo.title}</a>
           </Item.Title>
 
-          <Item.Description class="text-sm text-muted-foreground">
-            A simple item with title and description.
+          <!-- Description with min-height to keep cards consistent -->
+          <Item.Description class="text-sm text-muted-foreground min-h-12">
+            {todo.description || "No description provided."}
           </Item.Description>
         </div>
 
-        <Item.Actions class="mt-4 flex gap-2">
+        <!-- Actions at bottom, left-aligned -->
+        <Item.Actions class="mt-4 flex gap-2 justify-start">
           <Button variant="outline" size="sm">Complete</Button>
           <Button variant="destructive" size="sm">Remove</Button>
         </Item.Actions>
