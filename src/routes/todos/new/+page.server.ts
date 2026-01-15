@@ -1,26 +1,42 @@
 import type { Actions } from "./$types";
-import { createTodo } from "$lib/api/todos";
 import { todoSchema, type TodoSchema } from "$lib/schemas/todos";
-import { fail } from "@sveltejs/kit";
+import { fail, redirect } from "@sveltejs/kit";
 import z from "zod";
+import { createApi } from "$lib/api/client";
 
 export const actions = {
   default: async ({ request, fetch }) => {
-    const formData = Object.fromEntries(await request.formData());
+    const formData = Object.fromEntries(await request.formData()) as Record<
+      string,
+      string
+    >;
 
     const result = todoSchema.safeParse(formData);
 
     if (!result.success) {
-      const flattened = z.flattenError(result.error);
+      const errors = z.treeifyError(result.error);
       return fail(400, {
-        errors: flattened,
+        titleError: errors.properties?.title?.errors,
+        descError: errors.properties?.description?.errors,
       });
     }
 
     const todo: TodoSchema = result.data;
 
-    const newTodo = await createTodo(todo.title, todo.description, fetch);
+    try {
+      const api = createApi(fetch);
+      const res = await api.post("/api/todos", todo);
 
-    return { success: true, newTodo };
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        return fail(res.status, {
+          errors: { err },
+        });
+      }
+    } catch (error) {
+      return fail(500, {
+        errors: { error },
+      });
+    }
   },
 } satisfies Actions;
