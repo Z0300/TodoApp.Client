@@ -6,10 +6,7 @@ import { createApi } from "$lib/api/client";
 
 export const actions = {
   default: async ({ request, fetch }) => {
-    const formData = Object.fromEntries(await request.formData()) as Record<
-      string,
-      string
-    >;
+    const formData = Object.fromEntries(await request.formData());
 
     const result = todoSchema.safeParse(formData);
 
@@ -23,20 +20,16 @@ export const actions = {
 
     const todo: TodoSchema = result.data;
 
-    try {
-      const api = createApi(fetch);
-      const res = await api.post("/api/todos", todo);
+    const api = createApi(fetch);
+    const res = await api.post("/api/todos", todo);
 
-      if (!res.ok) {
-        const err = await res.json().catch(() => ({}));
-        return fail(res.status, {
-          errors: { err },
-        });
-      }
-    } catch (error) {
-      return fail(500, {
-        errors: { error },
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      return fail(res.status, {
+        errors: { err },
       });
+    } else {
+      redirect(303, "/todos");
     }
   },
 } satisfies Actions;

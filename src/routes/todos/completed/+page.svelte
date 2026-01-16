@@ -5,7 +5,7 @@
 </script>
 
 <ItemPage
-  title="All todos"
+  title="Completed todos"
   items={data.items}
   pageNumber={data.pageNumber}
   totalPages={data.totalPages}
